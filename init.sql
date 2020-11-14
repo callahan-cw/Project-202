@@ -8,5 +8,7 @@ CREATE TABLE phonebook_db.phonebook(
 INSERT INTO phonebook_db.phonebook (name, number)
     VALUES
         ("Callahan", "1234567890"),
-        ("Sergio Taco", "67854"),
-        ("Vincenzo Altobelli", "876543554");
+        ("Hakan S", "67854"),
+        ("Valeria", "23524562"),
+        ("Anvar", "547854678"),
+        ("Muhabbat", "876543554");
