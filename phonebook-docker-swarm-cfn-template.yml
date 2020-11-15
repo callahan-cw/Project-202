@@ -222,3 +222,86 @@ Resources:
               APP_REPO_NAME: clarusway-repo/phonebook-app
               GITHUB_REPO: https://github.com/callahan-cw/Project-202.git
               GIT_FILE_URL: https://raw.githubusercontent.com/callahan-cw/Project-202/master/
+  DockerManager2:
+    Type: AWS::EC2::Instance
+    DependsOn:
+      - DockerManager1
+    Properties:
+      LaunchTemplate:
+        LaunchTemplateId: !Ref DockerSwarmManagerLT
+        Version: !GetAtt DockerSwarmManagerLT.LatestVersionNumber 
+      Tags:                
+        -                        
+          Key: Name
+          Value: !Sub Docker Manager 2nd of ${AWS::StackName} 
+
+  DockerManager3:
+    Type: AWS::EC2::Instance
+    DependsOn:
+      - DockerManager2
+    Properties:
+      LaunchTemplate:
+        LaunchTemplateId: !Ref DockerSwarmManagerLT
+        Version: !GetAtt DockerSwarmManagerLT.LatestVersionNumber
+      Tags:                
+        -                        
+          Key: Name
+          Value: !Sub Docker Manager 3rd of ${AWS::StackName} 
+  
+  DockerWorker1:
+    Type: AWS::EC2::Instance
+    DependsOn:
+      - DockerManager1
+    Properties:
+      LaunchTemplate:
+        LaunchTemplateId: !Ref DockerSwarmWorkerLT
+        Version: !GetAtt DockerSwarmWorkerLT.LatestVersionNumber
+      Tags:                
+        -                        
+          Key: Name
+          Value: !Sub Docker Worker 1st of ${AWS::StackName} 
+  
+  DockerWorker2:
+    Type: AWS::EC2::Instance
+    DependsOn:
+      - DockerWorker1
+    Properties:
+      LaunchTemplate:
+        LaunchTemplateId: !Ref DockerSwarmWorkerLT
+        Version: !GetAtt DockerSwarmWorkerLT.LatestVersionNumber 
+      Tags:                
+        -                        
+          Key: Name
+          Value: !Sub Docker Worker 2nd of ${AWS::StackName}
+
+Outputs:
+  1stDockerManagerDashboard:
+    Description: Dashboard for Docker Swarm
+    Value: !Sub 
+      - http://${PublicAddress}:8080
+      - PublicAddress: !GetAtt DockerManager1.PublicDnsName
+  1stDockerManagerDNSName:
+    Description: Docker Manager 1st DNS Name
+    Value: !Sub 
+      - ${PublicAddress}
+      - PublicAddress: !GetAtt DockerManager1.PublicDnsName
+  2ndDockerManagerDNSName:
+    Description: Docker Manager 2nd DNS Name
+    Value: !Sub 
+      - ${PublicAddress}
+      - PublicAddress: !GetAtt DockerManager2.PublicDnsName
+  3rdDockerManagerDNSName:
+    Description: Docker Manager 3rd DNS Name
+    Value: !Sub 
+      - ${PublicAddress}
+      - PublicAddress: !GetAtt DockerManager3.PublicDnsName
+  1stDockerWorkerDNSName:
+    Description: Docker Worker 1st DNS Name
+    Value: !Sub 
+      - ${PublicAddress}
+      - PublicAddress: !GetAtt DockerWorker1.PublicDnsName
+  2ndDockerWorkerDNSName:
+    Description: Docker Worker 2nd DNS Name
+    Value: !Sub 
+      - ${PublicAddress}
+      - PublicAddress: !GetAtt DockerWorker2.PublicDnsName
